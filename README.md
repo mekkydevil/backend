@@ -1,130 +1,224 @@
-# BNU Student Portal
+# 🎓 BNU Student Portal
 
-A comprehensive student portal application with integrated chatbot, GPA calculator, and campus map features.
+A comprehensive full-stack student portal application with complete backend API, authentication, course management, payment processing, and AI chatbot.
 
-## Features
+## ⚠️ IMPORTANT: Two Servers Required
 
-- 🤖 **AI Chatbot** - RAG-powered assistant using Groq API
-- 📊 **GPA Calculator** - Calculate term and accumulative GPA
-- 🗺️ **Campus Map** - Interactive map with routing
-- 🔐 **Authentication** - Secure login system
+This application requires **BOTH** frontend and backend to be running simultaneously:
+- **Frontend**: React app on port 5173
+- **Backend**: FastAPI server on port 8001
+
+**See [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md) for complete setup guide!**
+
+---
+
+## ✨ Features
+
+### Student Features
+- 🔐 **Authentication** - Secure login/register system
+- 👤 **Profile Management** - View and update student information
+- 📚 **Course Registration** - Browse and register for courses
+- 📊 **Grade Tracking** - View grades and GPA by semester
+- 💰 **Payment System** - Calculate tuition with GPA-based discounts
+- 📝 **Quiz System** - Take quizzes with auto-grading
+- 🤖 **AI Chatbot** - RAG-powered assistant for student queries
 - 📱 **Responsive Design** - Works on all devices
+- 🌐 **Bilingual** - Arabic/English support
 
-## Tech Stack
+### Admin Features
+- 📈 **Dashboard** - System statistics and analytics
+- 👥 **User Management** - Manage students and accounts
+- 📋 **Course Management** - Add/edit courses
+- 💳 **Payment Tracking** - Monitor payment status
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- React 19
-- Vite
+- React 19 + Vite
 - TailwindCSS
 - React Router
-- Leaflet (Maps)
+- i18next (Internationalization)
+- Formik (Forms)
 - Lucide Icons
 
 ### Backend
-- FastAPI
-- Python 3.11+
+- FastAPI (Python)
+- Pydantic (Data Validation)
+- JSON Database
 - Groq API (LLM)
 - ChromaDB (Vector Store)
+- Uvicorn (ASGI Server)
 
-## Quick Start
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Python 3.11+
-- Groq API key ([Get one here](https://console.groq.com/))
+- ✅ **Node.js** 16+ - [Download](https://nodejs.org/)
+- ✅ **Python** 3.8+ - [Download](https://www.python.org/)
+- ✅ **Groq API Key** - [Get free key](https://console.groq.com/)
 
-### Option 1: Automated Setup (Windows)
+### Installation
 
-```powershell
-# Start both frontend and backend
-.\start-dev.ps1
+**📖 For detailed setup instructions, see [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)**
+
+#### 1. Clone Repository
+```bash
+git clone <your-repo-url>
+cd <project-folder>
 ```
 
-### Option 2: Manual Setup
-
-#### Backend Setup
-
+#### 2. Install Dependencies
 ```bash
-cd backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-.\venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env and add your GROQ_API_KEY
-
-# Start server
-python main.py
-```
-
-Backend runs on: `http://localhost:8000`
-
-#### Frontend Setup
-
-```bash
-# Install dependencies
+# Frontend
 npm install
 
-# Start development server
+# Backend
+cd backend
+pip install -r requirements.txt
+```
+
+#### 3. Create Database
+```bash
+cd backend
+python seed_data.py
+```
+
+#### 4. Configure Environment
+```bash
+# Backend: Create backend/.env
+GROQ_API_KEY=your_groq_api_key_here
+
+# Frontend: .env already configured
+VITE_API_BASE_URL=http://localhost:8001
+```
+
+#### 5. Start Servers (Two Terminals)
+
+**Terminal 1 - Backend:**
+```bash
+cd backend
+python full_api.py
+```
+Backend runs on: `http://localhost:8001`
+
+**Terminal 2 - Frontend:**
+```bash
 npm run dev
 ```
-
 Frontend runs on: `http://localhost:5173`
 
-## Environment Configuration
+---
 
-### Frontend (.env)
-```env
-VITE_API_BASE_URL=http://localhost:8000
+## 🔑 Test Accounts
+
+| Username | Password | Role    |
+|----------|----------|---------|
+| 1000001  | pass123  | Student |
+| 2358858  | abcdef   | Student |
+| admin    | admin123 | Admin   |
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+```
+POST   /login                          - Login user
+POST   /forgot-password                - Password reset
+POST   /register                       - Register new user
 ```
 
-### Backend (backend/.env)
-```env
-GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.1-8b-instant
+### Student
+```
+GET    /api/student/{id}               - Get profile
+GET    /api/student/{id}/grades        - Get grades & GPA
+GET    /api/student/{id}/stats         - Get statistics
 ```
 
-## API Documentation
+### Courses
+```
+GET    /api/courses                    - List courses
+POST   /api/courses/register           - Register course
+GET    /api/student/{id}/registrations - View registrations
+```
 
-Once the backend is running, visit:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+### Payments
+```
+POST   /api/payment/calculate          - Calculate tuition
+POST   /api/payment/process            - Process payment
+```
 
-## Project Structure
+### Quizzes
+```
+GET    /api/quizzes                    - List quizzes
+POST   /api/quizzes/{id}/submit        - Submit answers
+```
+
+**Full API docs**: http://localhost:8001/docs (when backend is running)
+
+---
+
+## 📁 Project Structure
 
 ```
 .
-├── backend/                 # FastAPI backend
-│   ├── main.py             # Main API server
-│   ├── rag_chatbot.py      # Chatbot implementation
-│   ├── gpa_calculator.py   # GPA calculation logic
-│   └── requirements.txt    # Python dependencies
-├── src/                    # React frontend
-│   ├── components/         # React components
-│   ├── pages/             # Page components
-│   ├── services/          # API service layer
-│   ├── config/            # Configuration files
-│   └── css/               # Stylesheets
-├── public/                # Static assets
-└── INTEGRATION_GUIDE.md   # Detailed integration docs
+├── backend/                    # Backend API (FastAPI)
+│   ├── full_api.py            # Main API server ⭐ RUN THIS
+│   ├── database.py            # Database handler
+│   ├── models.py              # Data models
+│   ├── seed_data.py           # Create sample data
+│   ├── rag_chatbot.py         # AI chatbot
+│   ├── gpa_calculator.py      # GPA logic
+│   └── requirements.txt       # Python dependencies
+├── Data/
+│   └── db.json                # JSON database
+├── src/                       # Frontend (React)
+│   ├── pages/                 # Page components
+│   ├── services/              # API service layer
+│   │   ├── authService.js     # Authentication
+│   │   ├── studentService.js  # Student data
+│   │   ├── courseService.js   # Course management
+│   │   ├── paymentService.js  # Payments
+│   │   └── chatService.js     # Chatbot
+│   ├── config/
+│   │   └── api.js            # API configuration
+│   └── components/            # React components
+├── public/                    # Static assets
+├── .env                       # Frontend environment
+├── package.json               # Node dependencies
+├── SETUP_INSTRUCTIONS.md      # 📖 Detailed setup guide
+├── FULL_BACKEND_GUIDE.md      # Complete API docs
+└── README.md                  # This file
 ```
 
-## Available Scripts
+---
+
+## 🧪 Testing
+
+### Test Backend Health
+```bash
+curl http://localhost:8001/api/health
+```
+
+### Test API Endpoints
+Open `test-api.html` in browser for interactive testing.
+
+### Test Login
+1. Go to http://localhost:5173
+2. Login: `1000001` / `pass123`
+3. Should redirect to dashboard
+
+---
+
+## 📜 Available Scripts
 
 ### Frontend
 ```bash
-npm run dev      # Start development server
+npm run dev      # Start development server (port 5173)
 npm run build    # Build for production
 npm run preview  # Preview production build
 npm run lint     # Run ESLint
@@ -132,72 +226,194 @@ npm run lint     # Run ESLint
 
 ### Backend
 ```bash
-python main.py              # Start FastAPI server
-python test_chatbot.py      # Test chatbot functionality
+python full_api.py          # Start complete API server (port 8001)
+python seed_data.py         # Create/reset database
+python test_chatbot.py      # Test chatbot
 ```
 
-## Integration Details
+---
 
-The frontend communicates with the backend through a service layer:
+## 🔗 How It Works
 
-- **Chat Service** (`src/services/chatService.js`) - Handles chatbot interactions
-- **GPA Service** (`src/services/gpaService.js`) - Manages GPA calculations
-- **API Config** (`src/config/api.js`) - Centralized API endpoint configuration
+```
+┌──────────────────────────────────────────────────────────┐
+│  Browser: http://localhost:5173                          │
+│  ┌────────────────────────────────────────────────┐     │
+│  │  Frontend (React)                              │     │
+│  │  - Login, Dashboard, Courses, Grades, etc.     │     │
+│  └────────────────────────────────────────────────┘     │
+│                       │                                   │
+│                       │ HTTP Requests (fetch)             │
+│                       ▼                                   │
+└──────────────────────────────────────────────────────────┘
+                        │
+                        │ CORS Enabled ✅
+                        ▼
+┌──────────────────────────────────────────────────────────┐
+│  Backend: http://localhost:8001                          │
+│  ┌────────────────────────────────────────────────┐     │
+│  │  FastAPI Server (40+ endpoints)                │     │
+│  │  - Authentication, Courses, Grades, Payments   │     │
+│  └────────────────────────────────────────────────┘     │
+│                       │                                   │
+│                       ▼                                   │
+│  ┌────────────────────────────────────────────────┐     │
+│  │  Data/db.json (Database)                       │     │
+│  └────────────────────────────────────────────────┘     │
+└──────────────────────────────────────────────────────────┘
+```
 
-See [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md) for detailed integration documentation.
+**Both servers must run simultaneously!**
 
-## Features Overview
+---
 
-### Chatbot
-- Natural language conversations in Arabic/English
+## 🐛 Troubleshooting
+
+### "Failed to fetch" Error
+**Problem**: Backend not running  
+**Solution**: Start backend with `cd backend && python full_api.py`
+
+### "Module not found" (Python)
+**Problem**: Missing dependencies  
+**Solution**: `cd backend && pip install -r requirements.txt`
+
+### "Cannot find module" (Node)
+**Problem**: Missing packages  
+**Solution**: `npm install`
+
+### "Database not found"
+**Problem**: `Data/db.json` missing  
+**Solution**: `cd backend && python seed_data.py`
+
+### Port Already in Use
+**Problem**: Port 8001 or 5173 occupied  
+**Solution**: Kill the process or use different port
+
+### Login Not Working
+**Problem**: Wrong credentials or backend not running  
+**Solution**: Use `1000001` / `pass123` and verify backend is running
+
+**More help**: See [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)
+
+---
+
+## 📚 Documentation
+
+- **[SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)** - Complete setup guide
+- **[FULL_BACKEND_GUIDE.md](./FULL_BACKEND_GUIDE.md)** - API documentation
+- **[HOW_TO_USE_API.md](./HOW_TO_USE_API.md)** - API usage examples
+- **[FRONTEND_BACKEND_CONNECTION.md](./FRONTEND_BACKEND_CONNECTION.md)** - Architecture
+- **[COMPLETE_INTEGRATION_SUMMARY.md](./COMPLETE_INTEGRATION_SUMMARY.md)** - Integration overview
+
+---
+
+## 🎯 Key Features Explained
+
+### GPA-Based Payment Discounts
+- GPA ≥ 3.9: 25% discount
+- GPA ≥ 3.7: 15% discount
+- GPA ≥ 3.5: 10% discount
+
+### Auto-Grading Quizzes
+- Multiple choice questions
+- Instant results
+- Pass/fail based on 60% threshold
+
+### RAG Chatbot
 - Context-aware responses
 - Conversation history
-- Voice input support
+- Arabic/English support
 
-### GPA Calculator
-- Term GPA calculation
-- Accumulative GPA tracking
-- Multiple subjects support
-- Grade conversion (score to letter grade)
+---
 
-### Campus Map
-- Interactive map with OpenStreetMap
-- Location search with autocomplete
-- Route planning
-- Distance and time estimates
-
-## Troubleshooting
-
-### Backend Issues
-- Ensure Python 3.11+ is installed
-- Check GROQ_API_KEY is set correctly
-- Verify port 8000 is not in use
-
-### Frontend Issues
-- Clear node_modules and reinstall: `rm -rf node_modules && npm install`
-- Check backend is running on port 8000
-- Verify VITE_API_BASE_URL in .env
-
-### CORS Errors
-- Backend has CORS middleware configured
-- Vite proxy is set up for /api routes
-- Check both servers are running
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create feature branch: `git checkout -b feature-name`
+3. Make changes and test thoroughly
+4. Commit: `git commit -m 'Add feature'`
+5. Push: `git push origin feature-name`
+6. Submit pull request
 
-## License
+---
+
+## 📄 License
 
 This project is for educational purposes.
 
-## Support
+---
 
-For issues and questions, please check:
-- [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md) - Integration documentation
-- Backend API docs at http://localhost:8000/docs
-- Project issues on GitHub
+## 💡 For Developers
+
+### Adding New API Endpoint
+
+1. **Backend**: Add endpoint in `backend/full_api.py`
+2. **Service**: Add function in `src/services/`
+3. **Config**: Add endpoint in `src/config/api.js`
+4. **Frontend**: Use service in your component
+
+Example:
+```javascript
+// 1. Add to src/config/api.js
+newEndpoint: `${API_BASE_URL}/api/new-endpoint`
+
+// 2. Add to src/services/newService.js
+export const callNewEndpoint = async () => {
+  const response = await fetch(API_ENDPOINTS.newEndpoint);
+  return await response.json();
+};
+
+// 3. Use in component
+import { callNewEndpoint } from '../services/newService';
+const data = await callNewEndpoint();
+```
+
+---
+
+## 🆘 Support
+
+**Before asking for help, please:**
+1. ✅ Read [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)
+2. ✅ Check both servers are running
+3. ✅ Try test credentials: `1000001` / `pass123`
+4. ✅ Open `test-api.html` to test backend
+5. ✅ Check browser console for errors (F12)
+
+**Still stuck?**
+- Check API docs: http://localhost:8001/docs
+- Review documentation files listed above
+- Open an issue on GitHub
+
+---
+
+## ⚡ Quick Reference
+
+| What | Where | Port |
+|------|-------|------|
+| Frontend | http://localhost:5173 | 5173 |
+| Backend | http://localhost:8001 | 8001 |
+| API Docs | http://localhost:8001/docs | 8001 |
+| Database | Data/db.json | - |
+| Test Page | test-api.html | - |
+
+**Start Command:**
+```bash
+# Terminal 1
+cd backend && python full_api.py
+
+# Terminal 2  
+npm run dev
+```
+
+---
+
+## 🎉 Success Checklist
+
+You're all set if you can:
+- ✅ Access http://localhost:5173 (login page)
+- ✅ Access http://localhost:8001/api/health (shows "healthy")
+- ✅ Login with `1000001` / `pass123`
+- ✅ See student dashboard
+- ✅ Navigate to different pages
+
+**Congratulations! The system is fully integrated and working!** 🚀
